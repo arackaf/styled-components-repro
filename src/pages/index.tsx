@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import styled, { css } from "styled-components";
+import styled, { StyleSheetManager, css } from "styled-components";
 
 type Props = {
   $active?: boolean;
@@ -13,16 +13,19 @@ const red = css`
 `;
 
 const Junk = styled.div<Props>`
-  ${(props) => (props.$active ? red : null)}
+  font-size: 20px;
+  margin-left: 5px;
+  padding-right: 5px;
+  margin-top: 15px;
 `;
 
 const Junk2 = styled.div<Props>`
   font-size: 22px;
 
-  @media (min-width: 200) {
-    color: red;
+  @media (min-width: 200px) {
+    color: pink;
   }
-  @media (max-width: 200) {
+  @media (max-width: 200px) {
     color: blue;
   }
 `;
@@ -32,10 +35,10 @@ export default function Home() {
 
   const strictModeCrap = useRef(true);
   useEffect(() => {
-    strictModeCrap.current &&
-      setInterval(() => {
-        setActive((val) => (val ? false : true));
-      }, 2000);
+    //strictModeCrap.current &&
+    //setTimeout(() => {
+    setActive((val) => (val ? false : true));
+    //}, 2000);
     strictModeCrap.current = false;
   }, []);
 
@@ -46,8 +49,11 @@ export default function Home() {
 
   return rendered ? (
     <main>
-      <Junk $active={active}>Hello World - should be read {active ? "Yes" : "No"}</Junk>
-      <Junk2>Yooo</Junk2>
+      <div dir="rtl">
+        <Junk dir="rtl" $active={active}>
+          Hello World
+        </Junk>
+      </div>
     </main>
   ) : null;
 }
