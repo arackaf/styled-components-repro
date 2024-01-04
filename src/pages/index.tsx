@@ -14,19 +14,38 @@ const red = css`
 
 const Junk = styled.div<Props>`
   font-size: 20px;
-  margin-left: 5px;
-  padding-right: 5px;
-  margin-top: 15px;
-`;
 
-const Junk2 = styled.div<Props>`
-  font-size: 22px;
+  margin-left: 5px;
+  padding-right: 15px;
+  padding-left: 55px;
+
+  [dir="rtl"] & {
+    color: green;
+
+    margin-top: 2px;
+    margin-left: 50px;
+    margin-right: 51px;
+  }
 
   @media (min-width: 200px) {
-    color: pink;
+    span {
+      text-decoration: underline;
+      border-left: 2px solid purple;
+    }
+  }
+  @media (min-width: 200px) {
+    [dir="rtl"] & {
+      span {
+        line-height: 3;
+      }
+    }
+  }
+
+  @media (min-width: 200px) {
+    border: 1px solid red;
   }
   @media (max-width: 200px) {
-    color: blue;
+    border: 1px solid blue;
   }
 `;
 
@@ -50,9 +69,20 @@ export default function Home() {
   return rendered ? (
     <main>
       <div dir="rtl">
-        <Junk dir="rtl" $active={active}>
-          Hello World
-        </Junk>
+        <div>
+          <Junk $active={active}>
+            <span>Hello World</span>
+          </Junk>
+        </div>
+      </div>
+      <br />
+      <br />
+      <div>
+        <div>
+          <Junk $active={active}>
+            <span>Hello World</span>
+          </Junk>
+        </div>
       </div>
     </main>
   ) : null;
