@@ -1,7 +1,7 @@
 import { StyleSheetManager } from "styled-components";
 import { ComponentProps } from "react";
 
-import { transform } from "./logicalToPhysicalTransform";
+import { transform } from "./transform";
 
 type StyleSheetManagerProps = ComponentProps<typeof StyleSheetManager>;
 type StylisPlugins = StyleSheetManagerProps["stylisPlugins"];
