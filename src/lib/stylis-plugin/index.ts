@@ -12,10 +12,6 @@ const STYLIS_CONTEXTS = {
 };
 
 export function stylisPhysicalToLogical(context: number, content: string, selectors: string[]) {
-  //debugger;
-
-  console.log({ context, content, selectors: selectors.join("|") });
-  return;
   // transform physical to logical
   if (context === STYLIS_CONTEXTS.PROPERTY) {
     // parse content
