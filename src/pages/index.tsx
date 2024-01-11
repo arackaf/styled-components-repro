@@ -13,21 +13,11 @@ const red = css`
 `;
 
 const Junk = styled.div<Props>`
-  font-size: 20px;
-  margin-left: 5px;
-  padding-right: 5px;
-  margin-top: 15px;
-`;
-
-const Junk2 = styled.div<Props>`
-  font-size: 22px;
-
-  @media (min-width: 200px) {
-    color: pink;
-  }
-  @media (max-width: 200px) {
-    color: blue;
-  }
+  position: absolute;
+  ${() =>
+    css`
+      left: 100px;
+    `}
 `;
 
 export default function Home() {
@@ -48,12 +38,8 @@ export default function Home() {
   }, []);
 
   return rendered ? (
-    <main>
-      <div dir="rtl">
-        <Junk dir="rtl" $active={active}>
-          Hello World
-        </Junk>
-      </div>
+    <main style={{ position: "relative", padding: "20px" }}>
+      <Junk>Hello World</Junk>
     </main>
   ) : null;
 }
