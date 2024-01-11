@@ -2,6 +2,7 @@ import { StyleSheetManager } from "styled-components";
 import { ComponentProps } from "react";
 
 import { transform } from "./transform";
+import { expandShorthand } from "./expandShorthand";
 
 type StyleSheetManagerProps = ComponentProps<typeof StyleSheetManager>;
 type StylisPlugins = StyleSheetManagerProps["stylisPlugins"];
@@ -16,7 +17,6 @@ const styleRuleIsInDirSelector = (element: Element): boolean => {
 
   do {
     if (!elToCheck || /\[dir(=[^\]]*)?\]/.test(elToCheck.value)) {
-      console.log("HIT", element);
       return true;
     }
   } while ((elToCheck = elToCheck.parent));
@@ -24,26 +24,8 @@ const styleRuleIsInDirSelector = (element: Element): boolean => {
   return false;
 };
 
-export function expandShorthand(property: string, value: string): [string, string][] {
-  const shorthandProperties = ["margin", "padding"];
-
-  if (!shorthandProperties.includes(property)) {
-    return [[property, value]];
-  }
-
-  const [top, right = top, bottom = top, left = right] = value.trim().split(/\s+/);
-
-  return [
-    [`${property}-top`, top],
-    [`${property}-right`, right],
-    [`${property}-bottom`, bottom],
-    [`${property}-left`, left],
-  ];
-}
-
-export const stylisPhysicalToLogical: StylisPlugin = (element: Element, content, selectors) => {
+export const stylisPhysicalToLogical: StylisPlugin = (element: Element) => {
   if (element.type === "decl") {
-    console.log(element);
     if (styleRuleIsInDirSelector(element)) {
       return;
     }
@@ -51,10 +33,19 @@ export const stylisPhysicalToLogical: StylisPlugin = (element: Element, content,
     const property = typeof element.props === "string" ? element.props : element.props[0];
     const value = element.children as string;
 
-    const ret =
-      expandShorthand(property, value)
-        .map((rule) => transform(...rule).join(":"))
-        .join(";") + ";";
+    if (/-(left|right)/.test(property)) {
+      if (process.env.NODE_ENV === "development") {
+        // eslint-disable-next-line no-console
+        console.error(
+          `Avoid using the ${property} property since it does not translate well to RTL languages. Instead, use equivalent -inline-start|end property ---> ${property}: ${value}`
+        );
+      }
+    }
+
+    const ret = `${expandShorthand(property, value)
+      // @ts-ignore
+      .map((rule) => transform(...rule).join(":"))
+      .join(";")};`;
 
     element.return = ret;
   }
